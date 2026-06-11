@@ -211,7 +211,7 @@ int main()
 
     ObstaclePredictor predictor;
 
-    double total_time = 8.0;
+    double total_time = 10.0;
     double dt = 0.2;
 
     auto prediction =

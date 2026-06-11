@@ -16,10 +16,38 @@ bool DpStCost::IsInObstacle(double s, double t) const
             double lower = boundary.lower_points[i].s;
             double upper = boundary.upper_points[i].s;
 
+            if(lower < -9999)
+            {
+                continue;
+            }
+
             if(s >= lower && s <= upper)
+            {
                 return true;
+            }
         }
     }
+    return false;
+}
+
+bool DpStCost::IsCollision(double s0, double t0, double s1, double t1) const
+{
+    int sample_num = 10;
+
+    for(int k=0;k<=sample_num;k++)
+    {
+        double r = static_cast<double>(k) / sample_num;
+
+        double s = s0 + r * (s1-s0);
+
+        double t = t0 + r * (t1-t0);
+
+        if(IsInObstacle(s,t))
+        {
+            return true;
+        }
+    }
+
     return false;
 }
 
@@ -29,7 +57,7 @@ double DpStCost::GetObstacleCost( double s,double t) const
 
     constexpr double kCollisionCost = 1e8;
 
-    constexpr double kSafeDistance = 20.0;
+    constexpr double kSafeDistance = 15.0;
 
     constexpr double kObstacleWeight = 500.0;
 
@@ -76,6 +104,12 @@ double DpStCost::GetObstacleCost( double s,double t) const
             //----------------------------------
             if(distance < kSafeDistance)
             {
+                //  std::cout
+                //     << "obs influence "
+                //     << "t=" << t
+                //     << " s=" << s
+                //     << " dist=" << distance
+                //     << std::endl;
                 double ratio = (kSafeDistance - distance) / kSafeDistance;
 
                 total_cost += kObstacleWeight * ratio * ratio;
@@ -90,7 +124,7 @@ double DpStCost::GetObstacleCost( double s,double t) const
 double DpStCost::GetSpeedCost(double v, double ref_speed) const
 {
     double ration = (ref_speed - v) / ref_speed;
-    return 10.0 * ration * ration;
+    return 500.0 * ration * ration;
 }
 
 double DpStCost::GetAccelCost(const SpeedNode& parent,const SpeedNode& current,const SpeedNode& next) const
@@ -99,7 +133,7 @@ double DpStCost::GetAccelCost(const SpeedNode& parent,const SpeedNode& current,c
     double acc = (next.s - 2 * current.s + parent.s) / (dt * dt);
     double max_acc = 4.0;
     double ration = acc / max_acc;
-    return 3.0 * ration * ration;
+    return 30.0 * ration * ration;
 }
 
 double  DpStCost::GetJerkCost(const SpeedNode& grand_parent,const SpeedNode& parent,
@@ -109,5 +143,5 @@ double  DpStCost::GetJerkCost(const SpeedNode& grand_parent,const SpeedNode& par
     double jerk = (next.s - 3 * current.s + 3 * parent.s - grand_parent.s) / (dt * dt * dt);
     double max_jerk = 8.0;
     double ration = jerk / max_jerk;
-    return 2.0 * ration * ration;
+    return 50.0 * ration * ration;
 }

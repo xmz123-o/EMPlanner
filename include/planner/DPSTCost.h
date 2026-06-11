@@ -12,6 +12,8 @@ public:
 
     bool IsInObstacle(double s, double t) const;
 
+    bool IsCollision(double s0, double t0, double s1, double t1) const;
+
     double GetObstacleCost(double s,double t) const;
 
     double GetSpeedCost( double v,double ref_speed) const;

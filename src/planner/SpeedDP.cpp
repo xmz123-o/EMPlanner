@@ -81,7 +81,7 @@ std::vector<SpeedNode> SpeedDP::SpeedDP_Search(const std::vector<STBoundary>& bo
                     continue;
                 }
                 //hard constraint
-                if (dp_cost.IsInObstacle(next.s, next.t))
+                if (dp_cost.IsCollision(current.s,current.t,next.s, next.t))
                 {
                     continue;
                 }

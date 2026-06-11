@@ -26,8 +26,8 @@ int main()
 
     DynamicObstacle obs;
     obs.x = 60.0;
-    obs.y = -0.5;
-    obs.vx = 0.0;
+    obs.y = -2.5;
+    obs.vx = 1.0;
     obs.vy = 0.2;
     obs.length = 4.0;
     obs.width = 2.0;

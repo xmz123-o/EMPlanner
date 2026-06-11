@@ -13,11 +13,20 @@ void STGraph::SetTimeConfig(double total_time, double dt) {
 }
 
 STBoundary STGraph::GenerateFromPrediction(const std::vector<PredictedObstaclePoint>& prediction,
-                                           const DynamicObstacle& obs,int obs_id)
+                                            const DynamicObstacle& obs, int obs_id)
 {
     STBoundary boundary;
 
     boundary.id = obs_id;
+
+    constexpr double lane_half_width = 3.0;
+    constexpr double vehicle_half_width = 1.0;
+    constexpr double lateral_buffer = 0.5;
+
+    const double l_threshold =
+        lane_half_width +
+        vehicle_half_width +
+        lateral_buffer;
 
     for(const auto& pt : prediction)
     {
@@ -27,22 +36,22 @@ STBoundary STGraph::GenerateFromPrediction(const std::vector<PredictedObstaclePo
         lower.t = pt.t;
         upper.t = pt.t;
 
-        lower.s = pt.s - obs.length * 0.5;
-
-        upper.s = pt.s + obs.length * 0.5;
+        //----------------------------------
+        // 不占据车道
+        //----------------------------------
+        if(std::fabs(pt.l) > l_threshold)
+        {
+            lower.s = -10000.0;
+            upper.s = -10000.0;
+        }
+        else
+        {
+            lower.s = pt.s - obs.length * 0.5;
+            upper.s = pt.s + obs.length * 0.5;
+        }
 
         boundary.lower_points.push_back(lower);
         boundary.upper_points.push_back(upper);
-    }
-
-    for(const auto& pt : prediction)
-    {
-        std::cout
-            << "t="
-            << pt.t
-            << " s="
-            << pt.s
-            << std::endl;
     }
 
     return boundary;

@@ -1,4 +1,5 @@
 #include "common/ObstaclePredictor.h"
+#include <iostream>
 
 std::vector<PredictedObstaclePoint> ObstaclePredictor::Predict(const DynamicObstacle& obs,
                     const std::vector<ReferencePoint>& ref_line,double total_time,double dt)
@@ -19,6 +20,12 @@ std::vector<PredictedObstaclePoint> ObstaclePredictor::Predict(const DynamicObst
 
         pt.s = frenet.s;
         pt.l = frenet.l;
+
+        std::cout
+        << "t=" << pt.t
+        << " s=" << pt.s
+        << " l=" << pt.l
+        << std::endl;
 
         result.push_back(pt);
     }

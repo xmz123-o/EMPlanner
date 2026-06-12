@@ -267,10 +267,29 @@ std::vector<TrajectoryPoint> Simulator::Plan()
 
     std::vector<STBoundary> st_boundaries;
 
+    constexpr double kFrontRange = 100.0;
+    constexpr double kBackRange  = 20.0;
+    constexpr double kLatRange   = 4.5;
+
     int obs_id = 0;
+
     for(const auto& obs : dynamic_obstacles_)
     {
+        auto frenet = CoordinateTransform::CartesianToFrenet(obs.x,obs.y,local_ref);
+
+        double ds = frenet.s - ego_.s;
+        double dl = frenet.l;
+
+        if(ds < -kBackRange || ds > kFrontRange || std::abs(dl) > kLatRange) {
+            continue;
+        }
+        
         auto boundary = st_graph_.GenerateSTBoundary(obs,obs_id++);
+
+        if(boundary.lower_points.empty())
+        {
+            continue;
+        }
 
         for(auto& p : boundary.lower_points)
         {
@@ -285,9 +304,7 @@ std::vector<TrajectoryPoint> Simulator::Plan()
         st_boundaries.push_back(boundary);
     }
 
-    std::cout
-    << "\n===== ST BOUNDARY ====="
-    << std::endl;
+    std::cout << "\n===== ST BOUNDARY =====" << std::endl;
 
     for(const auto& b : st_boundaries)
     {
@@ -313,6 +330,12 @@ std::vector<TrajectoryPoint> Simulator::Plan()
         << std::endl;
 
     auto speed_dp = speed_dp_.SpeedDP_Search(st_boundaries,ego_.v);
+
+    if(speed_dp.empty())
+    {
+        std::cout << "SpeedDP Empty" << std::endl;
+        return {};
+    }
 
     auto speed_qp = speed_qp_.QP_Optimize(speed_dp);
 

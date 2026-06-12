@@ -19,15 +19,6 @@ STBoundary STGraph::GenerateFromPrediction(const std::vector<PredictedObstaclePo
 
     boundary.id = obs_id;
 
-    constexpr double lane_half_width = 3.0;
-    constexpr double vehicle_half_width = 1.0;
-    constexpr double lateral_buffer = 0.5;
-
-    const double l_threshold =
-        lane_half_width +
-        vehicle_half_width +
-        lateral_buffer;
-
     for(const auto& pt : prediction)
     {
         STPoint lower;
@@ -36,19 +27,8 @@ STBoundary STGraph::GenerateFromPrediction(const std::vector<PredictedObstaclePo
         lower.t = pt.t;
         upper.t = pt.t;
 
-        //----------------------------------
-        // 不占据车道
-        //----------------------------------
-        if(std::fabs(pt.l) > l_threshold)
-        {
-            lower.s = -10000.0;
-            upper.s = -10000.0;
-        }
-        else
-        {
-            lower.s = pt.s - obs.length * 0.5;
-            upper.s = pt.s + obs.length * 0.5;
-        }
+        lower.s = pt.s - obs.length * 0.5;
+        upper.s = pt.s + obs.length * 0.5;
 
         boundary.lower_points.push_back(lower);
         boundary.upper_points.push_back(upper);
@@ -86,4 +66,3 @@ void STGraph::SaveSTObstacles(const std::vector<STBoundary>& boundaries, const s
 
     file.close();
 }
-

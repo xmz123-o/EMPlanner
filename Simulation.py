@@ -259,8 +259,6 @@ ani = animation.FuncAnimation(
     blit=False
 )
 
-ax.legend()
-
 # ==========================================
 # Run
 # ==========================================
@@ -279,6 +277,6 @@ ani = animation.FuncAnimation(
 ax.legend()
 
 # 保存视频（新增）
-ani.save('simulation.mp4', writer='ffmpeg', fps=20)
+ani.save('simulation3.mp4', writer='ffmpeg', fps=20)
 
 plt.show()

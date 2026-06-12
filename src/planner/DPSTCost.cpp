@@ -16,11 +16,6 @@ bool DpStCost::IsInObstacle(double s, double t) const
             double lower = boundary.lower_points[i].s;
             double upper = boundary.upper_points[i].s;
 
-            if(lower < -9999)
-            {
-                continue;
-            }
-
             if(s >= lower && s <= upper)
             {
                 return true;

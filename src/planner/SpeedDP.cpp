@@ -178,6 +178,15 @@ std::vector<SpeedNode> SpeedDP::SpeedDP_Search(const std::vector<STBoundary>& bo
         j = pj;
     }
 
+    if(best_i == -1 || best_j == -1)
+    {
+        std::cout
+            << "SpeedDP failed: no reachable node"
+            << std::endl;
+
+        return {};
+    }
+    
     std::reverse(path.begin(), path.end());
 
     std::cout

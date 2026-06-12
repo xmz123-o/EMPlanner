@@ -32,16 +32,16 @@ int main()
     obs.length = 4.0;
     obs.width = 2.0;
 
-    // DynamicObstacle obs1;
-    // obs.x = 150.0;
-    // obs.y = -1.5;
-    // obs.vx = 0.0;
-    // obs.vy = 0.3;
-    // obs.length = 4.0;
-    // obs.width = 2.0;
+    DynamicObstacle obs1;
+    obs1.x = 80.0;
+    obs1.y = -4;
+    obs1.vx = 1.0;
+    obs1.vy = 0.1;
+    obs1.length = 4.0;
+    obs1.width = 2.0;
 
     dynamic_obstacles.push_back(obs);
-   // dynamic_obstacles.push_back(obs1);
+    dynamic_obstacles.push_back(obs1);
 
     //----------------------------------
     // Simulator

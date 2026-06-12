@@ -3,8 +3,7 @@
 #include <sstream>
 #include <cmath>
 
-std::vector<ReferencePoint>
-ReferenceLineProvider::GenerateSineCurve()
+std::vector<ReferencePoint> ReferenceLineProvider::GenerateSineCurve()
 {
     std::vector<ReferencePoint> ref_line;
 

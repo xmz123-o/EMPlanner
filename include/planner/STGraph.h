@@ -16,6 +16,8 @@ struct STPoint
 {
     double s;
     double t;
+
+    bool valid = true;
 };
 
 struct STBoundary
